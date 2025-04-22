@@ -7,7 +7,7 @@ import java.util.List;
 public interface BrandRepository {
     public String save(Brand brand);
 
-    public void delete(String name);
+    public void delete(String id);
 
     public List<Brand> findAll();
 
