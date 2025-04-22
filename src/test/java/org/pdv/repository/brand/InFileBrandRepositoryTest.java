@@ -144,18 +144,18 @@ public class InFileBrandRepositoryTest {
         final var file = new File(filePath);
 
         try {
-            final var brandsFile = objectMapper.readValue(file, BrandModel[].class);
-            return brandsFile == null ? List.of() : List.of(brandsFile);
+            final var fileValue = objectMapper.readValue(file, BrandModel[].class);
+            return fileValue == null ? List.of() : List.of(fileValue);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void populateFile(List<BrandModel> brands) {
+    private void populateFile(List<BrandModel> value) {
         final var file = new File(filePath);
 
         try {
-            objectMapper.writeValue(file, brands);
+            objectMapper.writeValue(file, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

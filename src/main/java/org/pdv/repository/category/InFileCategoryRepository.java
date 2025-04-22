@@ -64,7 +64,7 @@ public class InFileCategoryRepository implements CategoryRepository {
     public void update(Category category) {
         List<CategoryModel> values = readFromFile();
         Optional<CategoryModel> existingValue = values.stream()
-                .filter(b -> b.id.equals(category.getId()))
+                .filter(value -> value.id.equals(category.getId()))
                 .findFirst();
 
         if (existingValue.isPresent()) {
