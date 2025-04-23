@@ -1,12 +1,12 @@
 package org.pdv.repository.brand;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pdv.domain.brand.Brand;
 import org.pdv.repository.brand.models.BrandModel;
+import org.pdv.shared.JsonMapper;
 
 import java.io.File;
 import java.util.List;
@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InFileBrandRepositoryTest {
     private final InFileBrandRepository repository = new InFileBrandRepository("testBrands");
     private final String filePath = "testBrands" + File.separator + "brands.json";
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void givenValidParams_whenSaveBrand_thenShouldSaveBrand() {
@@ -144,7 +143,7 @@ public class InFileBrandRepositoryTest {
         final var file = new File(filePath);
 
         try {
-            final var fileValue = objectMapper.readValue(file, BrandModel[].class);
+            final var fileValue = JsonMapper.get().readValue(file, BrandModel[].class);
             return fileValue == null ? List.of() : List.of(fileValue);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -155,7 +154,7 @@ public class InFileBrandRepositoryTest {
         final var file = new File(filePath);
 
         try {
-            objectMapper.writeValue(file, value);
+            JsonMapper.get().writeValue(file, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

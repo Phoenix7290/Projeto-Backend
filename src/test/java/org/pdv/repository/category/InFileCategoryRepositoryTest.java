@@ -1,12 +1,12 @@
 package org.pdv.repository.category;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.pdv.domain.category.Category;
 import org.pdv.repository.category.models.CategoryModel;
+import org.pdv.shared.JsonMapper;
 
 import java.io.File;
 import java.util.List;
@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InFileCategoryRepositoryTest {
     private final InFileCategoryRepository repository = new InFileCategoryRepository("testCategories");
     private final String filePath = "testCategories" + File.separator + "categories.json";
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void givenValidParams_whenSaveCategory_thenShouldSaveCategory() {
@@ -144,7 +143,7 @@ public class InFileCategoryRepositoryTest {
         final var file = new File(filePath);
 
         try {
-            final var value = objectMapper.readValue(file, CategoryModel[].class);
+            final var value = JsonMapper.get().readValue(file, CategoryModel[].class);
             return value == null ? List.of() : List.of(value);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -155,7 +154,7 @@ public class InFileCategoryRepositoryTest {
         final var file = new File(filePath);
 
         try {
-            objectMapper.writeValue(file, value);
+            JsonMapper.get().writeValue(file, value);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

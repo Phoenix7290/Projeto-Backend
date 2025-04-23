@@ -1,9 +1,9 @@
 package org.pdv.repository.category;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.pdv.domain.category.Category;
 import org.pdv.repository.category.models.CategoryModel;
 import org.pdv.service.category.CategoryRepository;
+import org.pdv.shared.JsonMapper;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +13,6 @@ import java.util.Optional;
 
 public class InFileCategoryRepository implements CategoryRepository {
     private final String filePath;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public InFileCategoryRepository(String dirPath) {
         if (dirPath == null || dirPath.isEmpty()) {
@@ -81,7 +80,7 @@ public class InFileCategoryRepository implements CategoryRepository {
                 return new ArrayList<>();
             }
 
-            final var fileValue = objectMapper.readValue(file, CategoryModel[].class);
+            final var fileValue = JsonMapper.get().readValue(file, CategoryModel[].class);
             return fileValue == null ? new ArrayList<>() : new ArrayList<>(List.of(fileValue));
         } catch (Exception e) {
             throw new RuntimeException("Failed to read categories from file", e);
@@ -97,7 +96,7 @@ public class InFileCategoryRepository implements CategoryRepository {
             }
 
             try (var writer = new FileWriter(file)) {
-                objectMapper.writeValue(writer, value);
+                JsonMapper.get().writeValue(writer, value);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to write categories to file", e);

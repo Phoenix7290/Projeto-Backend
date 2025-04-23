@@ -1,9 +1,9 @@
 package org.pdv.repository.brand;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.pdv.domain.brand.Brand;
 import org.pdv.repository.brand.models.BrandModel;
 import org.pdv.service.brand.BrandRepository;
+import org.pdv.shared.JsonMapper;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +13,6 @@ import java.util.Optional;
 
 public class InFileBrandRepository implements BrandRepository {
     private final String filePath;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public InFileBrandRepository(String dirPath) {
         if (dirPath == null || dirPath.isEmpty()) {
@@ -80,7 +79,7 @@ public class InFileBrandRepository implements BrandRepository {
                 return new ArrayList<>();
             }
 
-            final var fileValue = objectMapper.readValue(file, BrandModel[].class);
+            final var fileValue = JsonMapper.get().readValue(file, BrandModel[].class);
             return fileValue == null ? new ArrayList<>() : new ArrayList<>(List.of(fileValue));
         } catch (Exception e) {
             throw new RuntimeException("Failed to read brands from file", e);
@@ -96,7 +95,7 @@ public class InFileBrandRepository implements BrandRepository {
             }
 
             try (var writer = new FileWriter(file)) {
-                objectMapper.writeValue(writer, brands);
+                JsonMapper.get().writeValue(writer, brands);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to write brands to file", e);

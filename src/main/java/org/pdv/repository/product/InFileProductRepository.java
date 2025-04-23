@@ -1,9 +1,9 @@
 package org.pdv.repository.product;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.pdv.domain.product.Product;
 import org.pdv.repository.product.models.ProductModel;
 import org.pdv.service.product.ProductRepository;
+import org.pdv.shared.JsonMapper;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +13,6 @@ import java.util.Optional;
 
 public class InFileProductRepository implements ProductRepository {
     private final String filePath;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public InFileProductRepository(String dirPath) {
         if (dirPath == null || dirPath.isEmpty()) {
@@ -81,7 +80,7 @@ public class InFileProductRepository implements ProductRepository {
                 return new ArrayList<>();
             }
 
-            final var fileValue = objectMapper.readValue(file, ProductModel[].class);
+            final var fileValue = JsonMapper.get().readValue(file, ProductModel[].class);
             return fileValue == null ? new ArrayList<>() : new ArrayList<>(List.of(fileValue));
         } catch (Exception e) {
             throw new RuntimeException("Failed to read products from file", e);
@@ -97,7 +96,7 @@ public class InFileProductRepository implements ProductRepository {
             }
 
             try (var writer = new FileWriter(file)) {
-                objectMapper.writeValue(writer, value);
+                JsonMapper.get().writeValue(writer, value);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to write products to file", e);
